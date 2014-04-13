@@ -1,0 +1,9 @@
+{% if retailers %}
+    <ul>
+    {% for  retailer in retailers %}
+        <li><a href="{% url 'infra:retailer_details' retailer.id %}/">{{ retailer }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No retailers available.</p>
+{% endif %}

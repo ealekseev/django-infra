@@ -1,0 +1,12 @@
+{% if retailer %}
+<table>
+    <tr>
+        <td><a>Название:</a></td><td><a>{{ retailer.name }}</a></td>
+    </tr><tr>
+        <td><a>Номер договора:</a></td><td><a>{{ retailer.contract_id }}</a></td>
+    </tr><tr>
+        <td><a>Адрес:</a></td><td><a>{{ retailer.address }}</a></td>
+    </tr>
+</table>
+{% else %}
+{% endif%}
