@@ -1,11 +1,16 @@
 from django.db import models
 
+from django.utils.ipv6 import clean_ipv6_address
+
 # Create your models here.
 
 class Retailer(models.Model):
     name = models.CharField(max_length=64)
     contract_id = models.CharField(max_length=32)
     address = models.TextField()
+
+    def __unicode__(self):
+        return u"{} ({})".format(self.name, self.contract_id)
 
 class Hardware(models.Model):
     serial = models.CharField(max_length=64)
@@ -16,7 +21,10 @@ class Hardware(models.Model):
     comment = models.TextField()
     location = models.CharField(max_length=128)
 
-class Servers(models.Model):
+    def __unicode__(self):
+        return u"{}: {}".format(self.hw_type, self.serial)
+
+class Server(models.Model):
     SERV_TYPE_CHOICES = (('hws', 'hardware server'), 
                          ('kvm', 'KVM guest'))
     hardware = models.ForeignKey(Hardware)
@@ -25,20 +33,29 @@ class Servers(models.Model):
     mac = models.CharField(max_length=17)
     kvm_host = models.BooleanField(default=False)
 
-class Builds(models.Model):
+    def __unicode__(self):
+        return u"{:=06} ({})".format(self.id, self.mac)
+
+class Build(models.Model):
     prefix = models.CharField(max_length=4, default='fs')
     name = models.CharField(max_length=16, default='generic')
     version = models.CharField(max_length=6)
     revision = models.PositiveSmallIntegerField()
 
-class Nodes(models.Model):
+    def __unicode__(self):
+        return u"{}_{}/{}.{}".format(self.prefix, self.name, self.version, self.revision)
+
+class Node(models.Model):
     hostname = models.CharField(max_length=255)
-    server = models.ForeignKey(Servers)
-    build = models.ForeignKey(Builds)
+    server = models.ForeignKey(Server)
+    build = models.ForeignKey(Build)
     #FIXME - maybe need separate class for conf_type
     conf_type = models.CharField(max_length=32)
 
-class Subnets(models.Model):
+    def __unicode__(self):
+        return self.hostname
+
+class Subnet(models.Model):
     IP_PROTOCOL_CHOICES = (('ipv4', 'IPv4 subnet'),
                           ('ipv6', 'IPv6 subnet'))
     net = models.GenericIPAddressField(protocol='both')
@@ -46,8 +63,19 @@ class Subnets(models.Model):
     protocol = models.CharField(max_length=4, choices=IP_PROTOCOL_CHOICES)
     mark = models.CharField(max_length=8)
 
-class Ip_addresses(models.Model):
-    subnet = models.ForeignKey(Subnets)
+    def __unicode__(self):
+        return u"{}/{}".format(self.net, self.mask)
+
+class Ip_address(models.Model):
+    subnet = models.ForeignKey(Subnet)
     ip = models.GenericIPAddressField(protocol='both')
-    node = models.ForeignKey(Nodes)
+    node = models.ForeignKey(Node)
+
+    def norm(self):
+        if self.subnet.protocol == 'ipv4':
+            return clean_ipv6_address(self.ip, True)
+        return self.ip
+
+    def __unicode__(self):
+        return self.ip
 
