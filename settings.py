@@ -86,3 +86,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/d/djangoinru/django-infra.ru/static/'
 MEDIA_ROOT = '/home/d/djangoinru/django-infra.ru/media/'
+
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'django_project', 'templates')]

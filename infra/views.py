@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import RequestContext, loader
+from django.views import generic
 
 from infra.models import Retailer
 
@@ -26,3 +27,7 @@ def list_hardware(request):
 
 def list_servers(request):
     return HttpResponse("Here will be list of hardware.")
+
+class RetailerView(generic.DetailView):
+    model = Retailer
+    template_name = "infra/retailer_details.html"
