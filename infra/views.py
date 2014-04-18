@@ -40,7 +40,7 @@ def retailer_list(request):
     else:
         retailers = Retailer.objects.order_by('id')
 
-    paginator = Paginator(retailers, 1)
+    paginator = Paginator(retailers, 25)
     page = request.GET.get('page', 1)
     try:
         retailer_list = paginator.page(page)
