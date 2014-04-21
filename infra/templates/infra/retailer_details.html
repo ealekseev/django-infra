@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %}Поставщик: {{ retailer.name }} {% endblock %}
+{% block title %}Поставщик: {{ retailer.name }}{% endblock %}
 
 {% block content %}
+<div class="container">
 {% if retailer %}
-<table>
+<table class="table">
     <tr>
-        <td><a>Название:</a></td><td><a>{{ retailer.name }}</a></td>
+        <td class="col-sm-2" >Название:</td><td>{{ retailer.name }}</td>
     </tr><tr>
-        <td><a>Номер договора:</a></td><td><a>{{ retailer.contract_id }}</a></td>
+        <td>Номер договора:</td><td>{{ retailer.contract_id }}</td>
     </tr><tr>
-        <td><a>Адрес:</a></td><td><a>{{ retailer.address }}</a></td>
+        <td>Адрес:</td><td>{{ retailer.address }}</td>
     </tr>
 </table>
 {% else %}
 <p>Поставщик не найден.</p>
 {% endif%}
+</div>
 {% endblock %}

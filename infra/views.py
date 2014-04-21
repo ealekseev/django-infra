@@ -40,7 +40,7 @@ def retailer_list(request):
     else:
         retailers = Retailer.objects.order_by('id')
 
-    paginator = Paginator(retailers, 25)
+    paginator = Paginator(retailers, 1)
     page = request.GET.get('page', 1)
     try:
         retailer_list = paginator.page(page)
@@ -50,7 +50,7 @@ def retailer_list(request):
         retailer_list = paginator.page(paginator.num_pages)
 
     context = { 'retailers': retailer_list, 'form': form }
-    return render(request, 'infra/index.html', context)
+    return render(request, 'infra/retailer_list.html', context)
 
 def retailer_details(request, retailer_id):
 
