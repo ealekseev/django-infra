@@ -8,6 +8,14 @@ class Retailer(models.Model):
     name = models.CharField(max_length=64)
     contract_id = models.CharField(max_length=32)
     address = models.TextField()
+    bank = models.CharField(max_length=128)
+    inn = models.CharField(max_length=11)
+    ogrn = models.CharField(max_length=13)
+    r_acc = models.CharField(max_length=20)
+    c_acc = models.CharField(max_length=20)
+    bic = models.CharField(max_length=9)
+    phone = models.CharField(max_length=12)
+    comment = models.TextField(max_length=1024)
 
     def __unicode__(self):
         return u"{} ({})".format(self.name, self.contract_id)

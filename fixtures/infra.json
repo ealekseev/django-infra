@@ -1,0 +1,102 @@
+[
+{
+  "pk": 1, 
+  "model": "infra.retailer", 
+  "fields": {
+    "address": "foo bar ave. 36", 
+    "name": "okta", 
+    "contract_id": "00001/1"
+  }
+},
+{
+  "pk": 2, 
+  "model": "infra.retailer", 
+  "fields": {
+    "address": "Tsvetochnaya 18", 
+    "name": "altel", 
+    "contract_id": "00002/1"
+  }
+},
+{
+  "pk": 1, 
+  "model": "infra.hardware", 
+  "fields": {
+    "warranty": 36, 
+    "comment": "foo", 
+    "hw_type": "server", 
+    "retailer": 1, 
+    "purchase_date": "2014-04-13", 
+    "serial": "00001", 
+    "location": "datacenter"
+  }
+},
+{
+  "pk": 1, 
+  "model": "infra.server", 
+  "fields": {
+    "hardware": 1, 
+    "config_summary": "cool server with 2 procs", 
+    "serv_type": "hws", 
+    "mac": "00:25:90:d9:66:e0", 
+    "kvm_host": false
+  }
+},
+{
+  "pk": 1, 
+  "model": "infra.build", 
+  "fields": {
+    "prefix": "fs", 
+    "version": "201404", 
+    "name": "generic", 
+    "revision": 0
+  }
+},
+{
+  "pk": 1, 
+  "model": "infra.node", 
+  "fields": {
+    "conf_type": "shared", 
+    "hostname": "test02", 
+    "build": 1, 
+    "server": 1
+  }
+},
+{
+  "pk": 1, 
+  "model": "infra.subnet", 
+  "fields": {
+    "protocol": "ipv4", 
+    "net": "192.168.0.0", 
+    "mask": 22, 
+    "mark": "int"
+  }
+},
+{
+  "pk": 2, 
+  "model": "infra.subnet", 
+  "fields": {
+    "protocol": "ipv6", 
+    "net": "fe80::", 
+    "mask": 64, 
+    "mark": "linkloc"
+  }
+},
+{
+  "pk": 1, 
+  "model": "infra.ip_address", 
+  "fields": {
+    "node": 1, 
+    "subnet": 1, 
+    "ip": "192.168.0.2"
+  }
+},
+{
+  "pk": 2, 
+  "model": "infra.ip_address", 
+  "fields": {
+    "node": 1, 
+    "subnet": 2, 
+    "ip": "fe80::225:90ff:fed9:66e1"
+  }
+}
+]

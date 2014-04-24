@@ -59,6 +59,12 @@
         </div><!--/.nav-collapse -->
       </div>
     </div>
+    {% load django_bootstrap_breadcrumbs %}
+    {% block breadcrumbs %}
+      {% clear_breadcrumbs %}
+      {% breadcrumb "Home" "/" %}
+    {% endblock %}
+    {% render_breadcrumbs %}
     {% block content %}
     {% endblock %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

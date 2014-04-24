@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}Поставщики{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Поставщики" "retailer_list" infra.urls %}
+{% endblock %}
 {% block content %}
 <form class="well form-horizontal" role="form" action="{% url 'infra:retailer_list' %}" method="post">{% csrf_token %}
   <div class="form-group">

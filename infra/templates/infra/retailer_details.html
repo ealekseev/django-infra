@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}Поставщик: {{ retailer.name }}{% endblock %}
-
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Поставщики" "infra:retailer_list" %}
+  {% breadcrumb retailer.name "infra:retailer_details" %}
+{% endblock %}
 {% block content %}
 <div class="container">
 {% if retailer %}
@@ -10,6 +15,18 @@
         <td class="col-sm-2" >Название:</td><td>{{ retailer.name }}</td>
     </tr><tr>
         <td>Номер договора:</td><td>{{ retailer.contract_id }}</td>
+    </tr><tr>
+        <td>Адрес:</td><td>{{ retailer.address }}</td>
+    </tr><tr>
+        <td>Банк:</td><td>{{ retailer.bank }}</td>
+    </tr><tr>
+        <td>Адрес:</td><td>{{ retailer.address }}</td>
+    </tr><tr>
+        <td>Адрес:</td><td>{{ retailer.address }}</td>
+    </tr><tr>
+        <td>Адрес:</td><td>{{ retailer.address }}</td>
+    </tr><tr>
+        <td>Адрес:</td><td>{{ retailer.address }}</td>
     </tr><tr>
         <td>Адрес:</td><td>{{ retailer.address }}</td>
     </tr>

@@ -36,7 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_project.infra'
+    'django_bootstrap_breadcrumbs',
+    'django_project.infra',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,3 +89,14 @@ STATIC_ROOT = '/home/d/djangoinru/django-infra.ru/static/'
 MEDIA_ROOT = '/home/d/djangoinru/django-infra.ru/media/'
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'django_project', 'templates')]
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request'
+)
