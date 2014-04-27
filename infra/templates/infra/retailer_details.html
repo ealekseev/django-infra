@@ -8,7 +8,6 @@
   {% breadcrumb retailer.name "infra:retailer_details" %}
 {% endblock %}
 {% block content %}
-<div class="container">
 {% if retailer %}
 <table class="table">
     <tr>
@@ -20,19 +19,22 @@
     </tr><tr>
         <td>Банк:</td><td>{{ retailer.bank }}</td>
     </tr><tr>
-        <td>Адрес:</td><td>{{ retailer.address }}</td>
+        <td>БИК:</td><td>{{ retailer.bic }}</td>
     </tr><tr>
-        <td>Адрес:</td><td>{{ retailer.address }}</td>
+        <td>ОГРН:</td><td>{{ retailer.ogrn }}</td>
     </tr><tr>
-        <td>Адрес:</td><td>{{ retailer.address }}</td>
+        <td>Р/с:</td><td>{{ retailer.r_acc }}</td>
     </tr><tr>
-        <td>Адрес:</td><td>{{ retailer.address }}</td>
+        <td>К/с:</td><td>{{ retailer.c_acc }}</td>
     </tr><tr>
-        <td>Адрес:</td><td>{{ retailer.address }}</td>
+        <td>ИНН:</td><td>{{ retailer.inn }}</td>
+    </tr><tr>
+        <td>Телефон:</td><td>{{ retailer.phone }}</td>
+    </tr><tr>
+        <td>Комментарий:</td><td>{{ retailer.comment }}</td>
     </tr>
 </table>
 {% else %}
 <p>Поставщик не найден.</p>
 {% endif%}
-</div>
 {% endblock %}

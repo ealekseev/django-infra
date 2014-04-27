@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+{% endblock %}
+{% block content %}
+  <div class="panel panel-default">
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{% url 'infra:retailer_list' %}">Поставщики</a></li>
+      <li class="list-group-item"><a href="{% url 'infra:hardware_list' %}">Оборудование</a></li>
+    </ul>
+  </div>
+{% endblock %}

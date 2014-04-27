@@ -1,9 +1,12 @@
 from django.conf.urls import patterns, url
+from django.views.generic import TemplateView
 
 from django_project.infra import views
 
 urlpatterns = patterns('',
-    url(r'^$', views.index, name='index'),
+    url(r'^$', TemplateView.as_view(template_name="infra/index.html")),
     url(r'^retailer/$', views.retailer_list, name="retailer_list"),
-    url(r'^retailer/(?P<pk>\d+)/$', views.RetailerView.as_view(), name="retailer_details")
+    url(r'^retailer/(?P<pk>\d+)/$', views.RetailerView.as_view(), name="retailer_details"),
+    url(r'^hardware/$', views.hardware_list, name="hardware_list"),
+    url(r'^hardware/(?P<pk>\d+)/$', views.HardwareView.as_view(), name="hardware_details"),
 )

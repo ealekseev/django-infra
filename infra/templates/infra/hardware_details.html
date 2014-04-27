@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Оборудование{{ retailer.name }}{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Оборудование" "infra:hardware_list" %}
+  {% breadcrumb hardware.serial "infra:hardware_details" %}
+{% endblock %}
+{% block content %}
+{% if hardware %}
+<table class="table">
+    <tr>
+        <td class="col-sm-2" >Серийный номер:</td><td>{{ hardware.serial }}</td>
+    </tr><tr>
+        <td>Дата покупки:</td><td>{{ hardware.purchase_date }}</td>
+    </tr><tr>
+        <td>Срок гарантии:</td><td>{{ hardware.warranty }} мес.</td>
+    </tr><tr>
+        <td>Тип:</td><td>{{ hardware.hw_type }}</td>
+    </tr><tr>
+        <td>Поставщик:</td><td><a href="{% url 'infra:retailer_details' hardware.retailer.id %}">{{ hardware.retailer.name }}</a></td>
+    </tr><tr>
+        <td>Местонахождения:</td><td>{{ hardware.location }}</td>
+    </tr><tr>
+        <td>Комментарий:</td><td>{{ hardware.comment }}</td>
+    </tr>
+</table>
+{% else %}
+<p>Описание не найдено.</p>
+{% endif%}
+{% endblock %}

@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from django import forms
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from infra.models import Retailer
+from infra.models import *
 
 # Create your forms
 
@@ -17,6 +17,12 @@ class RetailerSearchForm(ModelForm):
         model = Retailer
         fields = ['name', 'contract_id']
 
+class HardwareSearchForm(ModelForm):
+    serial = forms.CharField(required=False)
+    hw_type = forms.CharField(required=False)
+    class Meta:
+        model = Retailer
+        fields = ['serial', 'hw_type']
 # Create your views here.
 
 def index(request):
@@ -40,7 +46,7 @@ def retailer_list(request):
     else:
         retailers = Retailer.objects.order_by('id')
 
-    paginator = Paginator(retailers, 1)
+    paginator = Paginator(retailers, 25)
     page = request.GET.get('page', 1)
     try:
         retailer_list = paginator.page(page)
@@ -58,8 +64,34 @@ def retailer_details(request, retailer_id):
     context = { 'retailer': retailer }
     return render(request, 'infra/retailer_details.html', context)
 
-def list_hardware(request):
-    return HttpResponse("Here will be list of hardware.")
+def hardware_list(request):
+    query = {}
+    if request.method == 'POST':
+        form = HardwareSearchForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['serial']:
+                query['serial__iexact'] = form.cleaned_data['serial']
+            if form.cleaned_data['hw_type']:
+                query['hw_type__iexact'] = form.cleaned_data['hw_type']
+    else:
+        form = HardwareSearchForm()
+
+    if query:
+        hardware = Hardware.objects.filter(**query)
+    else:
+        hardware = Hardware.objects.order_by('id')
+
+    paginator = Paginator(hardware, 25)
+    page = request.GET.get('page', 1)
+    try:
+        hardware_list = paginator.page(page)
+    except PageNotAnInteger:
+        hardware_list = paginator.page(1)
+    except EmptyPage:
+        hardware_list = paginator.page(paginator.num_pages)
+
+    context = { 'hardware': hardware_list, 'form': form }
+    return render(request, 'infra/hardware_list.html', context)
 
 def list_servers(request):
     return HttpResponse("Here will be list of hardware.")
@@ -67,3 +99,7 @@ def list_servers(request):
 class RetailerView(generic.DetailView):
     model = Retailer
     template_name = "infra/retailer_details.html"
+
+class HardwareView(generic.DetailView):
+    model = Hardware
+    template_name = "infra/hardware_details.html"

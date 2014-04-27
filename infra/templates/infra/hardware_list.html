@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Оборудование{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Оборудование" "hardware_list" infra.urls %}
+{% endblock %}
+{% block content %}
+<form class="well form-horizontal" role="form" action="{% url 'infra:hardware_list' %}" method="post">{% csrf_token %}
+  <div class="form-group">
+    <label for="id_serial" class="col-sm-2 control-label">Серийный номер</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_serial" name="serial"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_p_date" class="col-sm-2 control-label">Дата покупки (дд.мм.гггг) </label>
+    <div class="col-sm-10">
+      <input type="text" id="id_p_date" name="purchase_date" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_hw_type" class="col-sm-2 control-label">Тип</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_hw_type" name="hw_type"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Искать</button>
+    </div>
+  </div>
+</form>
+{% if hardware %}
+    <div class="container">
+    {% if hardware.paginator.num_pages and hardware.paginator.num_pages > 1 %}
+       <ul class="pagination pagination-sm">
+         <li {% if not hardware.has_previous %}class="disabled"{% endif %}><a href="{% if hardware.has_previous %}?page={{ hardware.previous_page_number }}{% else %}#{% endif %}"><span>&laquo;</span></a></li>
+         {% for page in hardware.paginator.page_range %}
+         <li {% if hardware.number == page %}class="active"{% endif %}><a href="?page={{ page }}"><span>{{ page }} {% if hardware.page == page %}<span class="sr-only">(текущая)</span>{% endif %}</span></a></li>
+         {% endfor %}
+         <li {% if not hardware.has_next %}class="disabled"{% endif %}><a href="{% if hardware.has_next %}?page={{ hardware.next_page_number }}{% else %}#{% endif %}"><span>&raquo;</span></a></li>
+       </ul>
+    </div>
+    {% endif %}
+    {% for  hardware in hardware %}
+        <a class="muted" href="{% url 'infra:hardware_details' hardware.id %}">{{ hardware }}</a><br>
+    {% endfor %}
+{% else %}
+    <p>Список поставщиков пуст.</p>
+{% endif %}
+{% endblock %}
