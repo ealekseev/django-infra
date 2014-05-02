@@ -25,6 +25,13 @@ class HardwareSearchForm(ModelForm):
         fields = ['serial', 'hw_type']
 
 class BuildSearchForm(ModelForm):
+    id = forms.IntegerField(required=False)
+    mac = forms.CharField(required=False)
+    class Meta:
+        model = Server
+        fields = ['id', 'mac']
+
+class ServerSearchForm(ModelForm):
     name = forms.CharField(required=False)
     class Meta:
         model = Build
@@ -130,9 +137,36 @@ def build_list(request):
     context = { 'builds': build_list, 'form': form }
     return render(request, 'infra/build_list.html', context)
 
-def list_servers(request):
-    return HttpResponse("Here will be list of hardware.")
+def server_list(request):
+    query = {}
+    if request.method == 'POST':
+        form = ServerSearchForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['id']:
+                query['id__exact'] = form.cleaned_data['id']
+            if form.cleaned_data['mac']:
+                query['mac__icontains'] = form.cleaned_data['mac']
+    else:
+        form = ServerSearchForm()
 
+    if query:
+        server = Server.objects.filter(**query)
+    else:
+        server = Server.objects.order_by('id')
+
+    paginator = Paginator(server, 25)
+    page = request.GET.get('page', 1)
+    try:
+        server_list = paginator.page(page)
+    except PageNotAnInteger:
+        server_list = paginator.page(1)
+    except EmptyPage:
+        server_list = paginator.page(paginator.num_pages)
+
+    context = { 'servers': server_list, 'form': form }
+    return render(request, 'infra/server_list.html', context)
+
+# Generic views
 class RetailerView(generic.DetailView):
     model = Retailer
     template_name = "infra/retailer_details.html"
@@ -144,3 +178,9 @@ class HardwareView(generic.DetailView):
 class BuildView(generic.DetailView):
     model = Build
     template_name = "infra/build_details.html"
+
+class ServerView(generic.DetailView):
+    model = Server
+    template_name = "infra/server_details.html"
+
+

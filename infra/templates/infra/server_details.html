@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Серверы: {{ server }}{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Серверы" "infra:server_list" %}
+  {% breadcrumb server "infra:server_details" %}
+{% endblock %}
+{% block content %}
+{% if server %}
+<table class="table">
+    <tr>
+        <td class="col-sm-2" >ID:</td><td>{{ server.id }}</td>
+    </tr><tr>
+        <td>MAC:</td><td>{{ server.mac }}</td>
+    </tr><tr>
+        <td>Оборудование:</td><td><a href="{% url 'infra:hardware_details' server.hardware.id %}">{{ server.hardware }}</a></td>
+    </tr><tr>
+        <td>Тип сервера:</td><td>{{ server.get_serv_type_display }}</td>
+    </tr><tr>
+        <td>Хост машина KVM? :</td><td>{{ server.hardware|yesno }}</td>
+    </tr>
+</table>
+{% else %}
+<p>Сервер не найден.</p>
+{% endif%}
+{% endblock %}

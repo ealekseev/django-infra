@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Серверы{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Серверы" "server_list" infra.urls %}
+{% endblock %}
+{% block content %}
+<form class="well form-horizontal" role="form" action="{% url 'infra:server_list' %}" method="post">{% csrf_token %}
+  <div class="form-group">
+    <label for="id_id" class="col-sm-2 control-label">ID:</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_id" name="id"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="id_mac" class="col-sm-2 control-label">MAC:</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_mac" name="mac"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Искать</button>
+    </div>
+  </div>
+</form>
+{% if servers %}
+    <div class="container">
+    {% if servers.paginator.num_pages and servers.paginator.num_pages > 1 %}
+       <ul class="pagination pagination-sm">
+         <li {% if not servers.has_previous %}class="disabled"{% endif %}><a href="{% if servers.has_previous %}?page={{ servers.previous_page_number }}{% else %}#{% endif %}"><span>&laquo;</span></a></li>
+         {% for page in servers.paginator.page_range %}
+         <li {% if servers.number == page %}class="active"{% endif %}><a href="?page={{ page }}"><span>{{ page }} {% if servers.page == page %}<span class="sr-only">(текущая)</span>{% endif %}</span></a></li>
+         {% endfor %}
+         <li {% if not servers.has_next %}class="disabled"{% endif %}><a href="{% if servers.has_next %}?page={{ servers.next_page_number }}{% else %}#{% endif %}"><span>&raquo;</span></a></li>
+       </ul>
+    </div>
+    {% endif %}
+    {% for  server in servers %}
+        <a class="muted" href="{% url 'infra:server_details' server.id %}">{{ server }}</a><br>
+    {% endfor %}
+{% else %}
+    <p>Список сборок пуст.</p>
+{% endif %}
+{% endblock %}

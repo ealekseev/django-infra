@@ -11,4 +11,6 @@ urlpatterns = patterns('',
     url(r'^hardware/(?P<pk>\d+)/$', views.HardwareView.as_view(), name="hardware_details"),
     url(r'^builds/$', views.build_list, name="build_list"),
     url(r'^builds/(?P<pk>\d+)/$', views.BuildView.as_view(), name="build_details"),
+    url(r'^servers/$', views.server_list, name="server_list"),
+    url(r'^servers/(?P<pk>\d+)/$', views.ServerView.as_view(), name="server_details"),
 )
