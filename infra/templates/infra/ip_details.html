@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Адрес: {{ ip_address }}{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "IP адреса" "infra:ip_list" %}
+  {% breadcrumb ip_address "infra:ip_details" %}
+{% endblock %}
+{% block content %}
+{% if ip_address %}
+<table class="table">
+    <tr>
+        <td class="col-sm-2" >Адрес:</td><td>{{ ip_address.ip }}</td>
+    </tr><tr>
+        <td>Подсеть:</td><td><a href="{% url 'infra:subnet_details' ip_address.subnet.id %}">{{ ip_address.subnet }}</a></td>
+    </tr><tr>
+        <td>Узел:</td><td><a href="{% url 'infra:node_details' ip_address.node.id %}">{{ ip_address.node }}</a></td>
+    </tr>
+</table>
+{% else %}
+<p>Адрес не найден.</p>
+{% endif%}
+{% endblock %}

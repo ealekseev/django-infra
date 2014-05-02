@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}IP адреса{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Узлы" "ip_list" infra.urls %}
+{% endblock %}
+{% block content %}
+<form class="well form-horizontal" role="form" action="{% url 'infra:ip_list' %}" method="post">{% csrf_token %}
+  <div class="form-group">
+    <label for="id_ip" class="col-sm-2 control-label">Адрес</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_ip" name="ip"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Искать</button>
+    </div>
+  </div>
+</form>
+{% if ips %}
+    <div class="container">
+    {% if ips.paginator.num_pages and ips.paginator.num_pages > 1 %}
+       <ul class="pagination pagination-sm">
+         <li {% if not ips.has_previous %}class="disabled"{% endif %}><a href="{% if ips.has_previous %}?page={{ ips.previous_page_number }}{% else %}#{% endif %}"><span>&laquo;</span></a></li>
+         {% for page in ips.paginator.page_range %}
+         <li {% if ips.number == page %}class="active"{% endif %}><a href="?page={{ page }}"><span>{{ page }} {% if ips.page == page %}<span class="sr-only">(текущая)</span>{% endif %}</span></a></li>
+         {% endfor %}
+         <li {% if not ips.has_next %}class="disabled"{% endif %}><a href="{% if ips.has_next %}?page={{ ips.next_page_number }}{% else %}#{% endif %}"><span>&raquo;</span></a></li>
+       </ul>
+    </div>
+    {% endif %}
+    {% for  ip in ips %}
+        <a class="muted" href="{% url 'infra:ip_details' ip.id %}">{{ ip }}</a><br>
+    {% endfor %}
+{% else %}
+    <p>Список адресов пуст.</p>
+{% endif %}
+{% endblock %}

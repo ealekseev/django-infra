@@ -51,6 +51,12 @@ class NodeSearchForm(ModelForm):
         model = Node
         fields = ['hostname', 'conf_type']
 
+class IpSearchForm(ModelForm):
+    ip = forms.CharField(required=False)
+    class Meta:
+        model = Ip_address
+        fields = ['ip']
+
 # Create your views here.
 
 def retailer_list(request):
@@ -235,6 +241,33 @@ def node_list(request):
     context = { 'nodes': node_list, 'form': form }
     return render(request, 'infra/node_list.html', context)
 
+def ip_list(request):
+    query = {}
+    if request.method == 'POST':
+        form = IpSearchForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['ip']:
+                query['ip__iexact'] = form.cleaned_data['ip']
+    else:
+        form = IpSearchForm()
+
+    if query:
+        ip = Ip_address.objects.filter(**query)
+    else:
+        ip = Ip_address.objects.order_by('id')
+
+    paginator = Paginator(ip, 25)
+    page = request.GET.get('page', 1)
+    try:
+        ip_list = paginator.page(page)
+    except PageNotAnInteger:
+        ip_list = paginator.page(1)
+    except EmptyPage:
+        ip_list = paginator.page(paginator.num_pages)
+
+    context = { 'ips': ip_list, 'form': form }
+    return render(request, 'infra/ip_list.html', context)
+
 # Generic views
 class RetailerView(generic.DetailView):
     model = Retailer
@@ -259,3 +292,8 @@ class SubnetView(generic.DetailView):
 class NodeView(generic.DetailView):
     model = Node
     template_name = "infra/node_details.html"
+
+class IpView(generic.DetailView):
+    model = Ip_address
+    template_name = "infra/ip_details.html"
+

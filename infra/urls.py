@@ -17,4 +17,6 @@ urlpatterns = patterns('',
     url(r'^subnets/(?P<pk>\d+)/$', views.SubnetView.as_view(), name="subnet_details"),
     url(r'^nodes/$', views.node_list, name="node_list"),
     url(r'^nodes/(?P<pk>\d+)/$', views.NodeView.as_view(), name="node_details"),
+    url(r'^ips/$', views.ip_list, name="ip_list"),
+    url(r'^ips/(?P<pk>\d+)/$', views.IpView.as_view(), name="ip_details"),
 )
