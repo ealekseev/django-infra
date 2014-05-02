@@ -62,6 +62,9 @@ class Node(models.Model):
 
     def __unicode__(self):
         return self.hostname
+    
+    def ip_list(self):
+        return [i for i in self.ip_address_set.all()]
 
 class Subnet(models.Model):
     IP_PROTOCOL_CHOICES = (('ipv4', 'IPv4'),
@@ -74,6 +77,9 @@ class Subnet(models.Model):
     def __unicode__(self):
         return u"{}/{}".format(self.net, self.mask)
 
+    def total_count(self):
+        return self.ip_address_set.count()
+
 class Ip_address(models.Model):
     subnet = models.ForeignKey(Subnet)
     ip = models.GenericIPAddressField(protocol='both')
@@ -85,5 +91,5 @@ class Ip_address(models.Model):
         return self.ip
 
     def __unicode__(self):
-        return self.ip
+        return "{}/{}".format(self.ip, self.subnet.mask)
 

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Узлы{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Узлы" "node_list" infra.urls %}
+{% endblock %}
+{% block content %}
+<form class="well form-horizontal" role="form" action="{% url 'infra:node_list' %}" method="post">{% csrf_token %}
+  <div class="form-group">
+    <label for="id_hostname" class="col-sm-2 control-label">Имя</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_hostname" name="hostname"/>
+    </div>
+  </div>
+ <div class="form-group">
+    <label for="id_conf_type" class="col-sm-2 control-label">Тип</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_conf_type" name="conf_type"/>
+    </div>
+  </div> 
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Искать</button>
+    </div>
+  </div>
+</form>
+{% if nodes %}
+    <div class="container">
+    {% if nodes.paginator.num_pages and nodes.paginator.num_pages > 1 %}
+       <ul class="pagination pagination-sm">
+         <li {% if not nodes.has_previous %}class="disabled"{% endif %}><a href="{% if nodes.has_previous %}?page={{ nodes.previous_page_number }}{% else %}#{% endif %}"><span>&laquo;</span></a></li>
+         {% for page in nodes.paginator.page_range %}
+         <li {% if nodes.number == page %}class="active"{% endif %}><a href="?page={{ page }}"><span>{{ page }} {% if nodes.page == page %}<span class="sr-only">(текущая)</span>{% endif %}</span></a></li>
+         {% endfor %}
+         <li {% if not nodes.has_next %}class="disabled"{% endif %}><a href="{% if nodes.has_next %}?page={{ nodes.next_page_number }}{% else %}#{% endif %}"><span>&raquo;</span></a></li>
+       </ul>
+    </div>
+    {% endif %}
+    {% for  node in nodes %}
+        <a class="muted" href="{% url 'infra:node_details' node.id %}">{{ node }}</a><br>
+    {% endfor %}
+{% else %}
+    <p>Список узлов пуст.</p>
+{% endif %}
+{% endblock %}

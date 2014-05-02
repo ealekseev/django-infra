@@ -15,4 +15,6 @@ urlpatterns = patterns('',
     url(r'^servers/(?P<pk>\d+)/$', views.ServerView.as_view(), name="server_details"),
     url(r'^subnets/$', views.subnet_list, name="subnet_list"),
     url(r'^subnets/(?P<pk>\d+)/$', views.SubnetView.as_view(), name="subnet_details"),
+    url(r'^nodes/$', views.node_list, name="node_list"),
+    url(r'^nodes/(?P<pk>\d+)/$', views.NodeView.as_view(), name="node_details"),
 )

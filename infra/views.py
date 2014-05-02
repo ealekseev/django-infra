@@ -44,6 +44,13 @@ class SubnetSearchForm(ModelForm):
         model = Subnet
         fields = ['net', 'mark']
 
+class NodeSearchForm(ModelForm):
+    hostname = forms.CharField(required=False)
+    conf_type = forms.CharField(required=False)
+    class Meta:
+        model = Node
+        fields = ['hostname', 'conf_name']
+
 # Create your views here.
 
 def retailer_list(request):
@@ -199,6 +206,34 @@ def subnet_list(request):
     context = { 'subnets': subnet_list, 'form': form }
     return render(request, 'infra/subnet_list.html', context)
 
+def node_list(request):
+    query = {}
+    if request.method == 'POST':
+        form = SubnetSearchForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['hostname']:
+                query['hostname__icontains'] = form.cleaned_data['hostname']
+            if form.cleaned_data['conf_type']:
+                query['conf_type__iexact'] = form.cleaned_data['conf_type']
+    else:
+        form = SubnetSearchForm()
+
+    if query:
+        node = Subnet.objects.filter(**query)
+    else:
+        node = Subnet.objects.order_by('id')
+
+    paginator = Paginator(node, 25)
+    page = request.GET.get('page', 1)
+    try:
+        node_list = paginator.page(page)
+    except PageNotAnInteger:
+        node_list = paginator.page(1)
+    except EmptyPage:
+        node_list = paginator.page(paginator.num_pages)
+
+    context = { 'nodes': node_list, 'form': form }
+    return render(request, 'infra/node_list.html', context)
 
 # Generic views
 class RetailerView(generic.DetailView):
@@ -221,3 +256,6 @@ class SubnetView(generic.DetailView):
     model = Subnet
     template_name = "infra/subnet_details.html"
 
+class NodeView(generic.DetailView):
+    model = Node
+    template_name = "infra/node_details.html"

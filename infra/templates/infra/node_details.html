@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Узел: {{ node }}{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Узлы" "infra:node_list" %}
+  {% breadcrumb node "infra:node_details" %}
+{% endblock %}
+{% block content %}
+{% if node %}
+<table class="table">
+    <tr>
+        <td class="col-sm-2" >Имя хоста:</td><td>{{ node.hostname }}</td>
+    </tr><tr>
+        <td>Сервер:</td><td><a href="{% url 'infra:server_details' node.server.id %}">{{ node.server }}</a></td>
+    </tr><tr>
+        <td>Сборка:</td><td><a href="{% url 'infra:build_details' node.build.id %}">{{ node.build }}</a></td>
+    </tr><tr>
+        <td>Тип:</td><td>{{ node.conf_type }}</td>
+    </tr><tr>
+        <td>Прикрепленные IP адреса:</td>
+        <td>
+          <ul>
+          {% for ip in node.ip_list %}
+            <li>{{ ip }}</li>
+          {% endfor %}
+          </ul>
+        </td>
+    </tr>
+</table>
+{% else %}
+<p>Узел не найден.</p>
+{% endif%}
+{% endblock %}
