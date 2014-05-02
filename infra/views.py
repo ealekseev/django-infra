@@ -49,7 +49,7 @@ class NodeSearchForm(ModelForm):
     conf_type = forms.CharField(required=False)
     class Meta:
         model = Node
-        fields = ['hostname', 'conf_name']
+        fields = ['hostname', 'conf_type']
 
 # Create your views here.
 
@@ -209,19 +209,19 @@ def subnet_list(request):
 def node_list(request):
     query = {}
     if request.method == 'POST':
-        form = SubnetSearchForm(request.POST)
+        form = NodeSearchForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['hostname']:
                 query['hostname__icontains'] = form.cleaned_data['hostname']
             if form.cleaned_data['conf_type']:
                 query['conf_type__iexact'] = form.cleaned_data['conf_type']
     else:
-        form = SubnetSearchForm()
+        form = NodeSearchForm()
 
     if query:
-        node = Subnet.objects.filter(**query)
+        node = Node.objects.filter(**query)
     else:
-        node = Subnet.objects.order_by('id')
+        node = Node.objects.order_by('id')
 
     paginator = Paginator(node, 25)
     page = request.GET.get('page', 1)
