@@ -175,10 +175,10 @@ def subnet_list(request):
     if request.method == 'POST':
         form = SubnetSearchForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data['id']:
-                query['id__exact'] = form.cleaned_data['id']
-            if form.cleaned_data['mac']:
-                query['mac__icontains'] = form.cleaned_data['mac']
+            if form.cleaned_data['net']:
+                query['net__icontains'] = form.cleaned_data['net']
+            if form.cleaned_data['mark']:
+                query['mark__iexact'] = form.cleaned_data['mark']
     else:
         form = SubnetSearchForm()
 

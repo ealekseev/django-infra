@@ -64,8 +64,8 @@ class Node(models.Model):
         return self.hostname
 
 class Subnet(models.Model):
-    IP_PROTOCOL_CHOICES = (('ipv4', 'IPv4 subnet'),
-                          ('ipv6', 'IPv6 subnet'))
+    IP_PROTOCOL_CHOICES = (('ipv4', 'IPv4'),
+                          ('ipv6', 'IPv6'))
     net = models.GenericIPAddressField(protocol='both')
     mask = models.PositiveSmallIntegerField()
     protocol = models.CharField(max_length=4, choices=IP_PROTOCOL_CHOICES)
