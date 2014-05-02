@@ -13,4 +13,6 @@ urlpatterns = patterns('',
     url(r'^builds/(?P<pk>\d+)/$', views.BuildView.as_view(), name="build_details"),
     url(r'^servers/$', views.server_list, name="server_list"),
     url(r'^servers/(?P<pk>\d+)/$', views.ServerView.as_view(), name="server_details"),
+    url(r'^subnets/$', views.subnet_list, name="subnet_list"),
+    url(r'^subnets/(?P<pk>\d+)/$', views.SubnetView.as_view(), name="subnet_details"),
 )

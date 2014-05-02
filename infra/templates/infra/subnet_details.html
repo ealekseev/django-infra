@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Подсеть: {{ subnet }}{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Подсети" "infra:subnet_list" %}
+  {% breadcrumb subnet "infra:subnet_details" %}
+{% endblock %}
+{% block content %}
+{% if subnet %}
+<table class="table">
+    <tr>
+        <td class="col-sm-2" >Подсеть:</td><td>{{ subnet.net}}</td>
+    </tr><tr>
+        <td>Префикс:</td><td>{{ subnet.mask }}</td>
+    </tr><tr>
+        <td>Протокол:</td><td>{{ subnet.get_protocol_display }}</td>
+    </tr><tr>
+        <td>Метка:</td><td>{{ subnet.mark }}</td>
+    </tr>
+</table>
+{% else %}
+<p>Подсеть не найдена.</p>
+{% endif%}
+{% endblock %}
