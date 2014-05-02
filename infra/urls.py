@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     url(r'^retailer/(?P<pk>\d+)/$', views.RetailerView.as_view(), name="retailer_details"),
     url(r'^hardware/$', views.hardware_list, name="hardware_list"),
     url(r'^hardware/(?P<pk>\d+)/$', views.HardwareView.as_view(), name="hardware_details"),
+    url(r'^builds/$', views.build_list, name="build_list"),
+    url(r'^builds/(?P<pk>\d+)/$', views.BuildView.as_view(), name="build_details"),
 )

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Сборки{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Сборки" "build_list" infra.urls %}
+{% endblock %}
+{% block content %}
+<form class="well form-horizontal" role="form" action="{% url 'infra:build_list' %}" method="post">{% csrf_token %}
+  <div class="form-group">
+    <label for="id_name" class="col-sm-2 control-label">Название</label>
+    <div class="col-sm-10">
+      <input type="text" id="id_name" name="name"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Искать</button>
+    </div>
+  </div>
+</form>
+{% if builds %}
+    <div class="container">
+    {% if builds.paginator.num_pages and builds.paginator.num_pages > 1 %}
+       <ul class="pagination pagination-sm">
+         <li {% if not builds.has_previous %}class="disabled"{% endif %}><a href="{% if builds.has_previous %}?page={{ builds.previous_page_number }}{% else %}#{% endif %}"><span>&laquo;</span></a></li>
+         {% for page in builds.paginator.page_range %}
+         <li {% if builds.number == page %}class="active"{% endif %}><a href="?page={{ page }}"><span>{{ page }} {% if builds.page == page %}<span class="sr-only">(текущая)</span>{% endif %}</span></a></li>
+         {% endfor %}
+         <li {% if not builds.has_next %}class="disabled"{% endif %}><a href="{% if builds.has_next %}?page={{ builds.next_page_number }}{% else %}#{% endif %}"><span>&raquo;</span></a></li>
+       </ul>
+    </div>
+    {% endif %}
+    {% for  build in builds %}
+        <a class="muted" href="{% url 'infra:build_details' build.id %}">{{ build }}</a><br>
+    {% endfor %}
+{% else %}
+    <p>Список сборок пуст.</p>
+{% endif %}
+{% endblock %}

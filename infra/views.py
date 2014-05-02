@@ -23,6 +23,13 @@ class HardwareSearchForm(ModelForm):
     class Meta:
         model = Retailer
         fields = ['serial', 'hw_type']
+
+class BuildSearchForm(ModelForm):
+    name = forms.CharField(required=False)
+    class Meta:
+        model = Build
+        fields = ['name']
+
 # Create your views here.
 
 def index(request):
@@ -58,12 +65,6 @@ def retailer_list(request):
     context = { 'retailers': retailer_list, 'form': form }
     return render(request, 'infra/retailer_list.html', context)
 
-def retailer_details(request, retailer_id):
-
-    retailer = get_object_or_404(Retailer, pk=retailer_id)
-    context = { 'retailer': retailer }
-    return render(request, 'infra/retailer_details.html', context)
-
 def hardware_list(request):
     query = {}
     if request.method == 'POST':
@@ -93,6 +94,42 @@ def hardware_list(request):
     context = { 'hardware': hardware_list, 'form': form }
     return render(request, 'infra/hardware_list.html', context)
 
+def build_list(request):
+    query = {}
+    if request.method == 'POST':
+        form = BuildSearchForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['name']:
+                prefix, sep, name = form.cleaned_data['name'].partition('_')
+                if name:
+                    query['name__icontains'] = name
+                    if prefix:
+                        query['prefix__iexact'] = prefix
+                elif prefix:
+                    if sep:
+                         query['prefix__iexact'] = prefix
+                    else:
+                        query['name__icontains'] = prefix
+    else:
+        form = BuildSearchForm()
+
+    if query:
+        build = Build.objects.filter(**query)
+    else:
+        build = Build.objects.order_by('id')
+
+    paginator = Paginator(build, 25)
+    page = request.GET.get('page', 1)
+    try:
+        build_list = paginator.page(page)
+    except PageNotAnInteger:
+        build_list = paginator.page(1)
+    except EmptyPage:
+        build_list = paginator.page(paginator.num_pages)
+
+    context = { 'builds': build_list, 'form': form }
+    return render(request, 'infra/build_list.html', context)
+
 def list_servers(request):
     return HttpResponse("Here will be list of hardware.")
 
@@ -103,3 +140,7 @@ class RetailerView(generic.DetailView):
 class HardwareView(generic.DetailView):
     model = Hardware
     template_name = "infra/hardware_details.html"
+
+class BuildView(generic.DetailView):
+    model = Build
+    template_name = "infra/build_details.html"

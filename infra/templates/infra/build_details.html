@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Сборк: {{ build }}{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Сборки" "infra:build_list" %}
+  {% breadcrumb build "infra:build_details" %}
+{% endblock %}
+{% block content %}
+{% if build %}
+<table class="table">
+    <tr>
+        <td class="col-sm-2" >Название:</td><td>{{ build.prefix}}_{{ build.name }}</td>
+    </tr><tr>
+        <td>Версия:</td><td>{{ build.version }}</td>
+    </tr><tr>
+        <td>Ревизия:</td><td>{{ build.revision }}</td>
+    </tr>
+</table>
+{% else %}
+<p>Сборк не найден.</p>
+{% endif%}
+{% endblock %}
