@@ -24,14 +24,14 @@ class HardwareSearchForm(ModelForm):
         model = Retailer
         fields = ['serial', 'hw_type']
 
-class BuildSearchForm(ModelForm):
+class ServerSearchForm(ModelForm):
     id = forms.IntegerField(required=False)
     mac = forms.CharField(required=False)
     class Meta:
         model = Server
         fields = ['id', 'mac']
 
-class ServerSearchForm(ModelForm):
+class BuildSearchForm(ModelForm):
     name = forms.CharField(required=False)
     class Meta:
         model = Build
