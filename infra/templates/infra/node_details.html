@@ -18,17 +18,26 @@
         <td>Сборка:</td><td><a href="{% url 'infra:build_details' node.build.id %}">{{ node.build }}</a></td>
     </tr><tr>
         <td>Тип:</td><td>{{ node.conf_type }}</td>
-    </tr><tr>
-        <td>Прикрепленные IP адреса:</td>
-        <td>
-          <table class="table" style="width:20%">
-          {% for ip in node.ip_list %}
-            <tr><td><a href="{% url 'infra:ip_details' ip.id %}">{{ ip }}</a></tr></td>
-          {% endfor %}
-          </table>
-        </td>
     </tr>
 </table>
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse_ip_list">
+              Прикрепленные IP адреса: {{ node.ip_list|length }}
+            </a>
+          </h4>
+        </div>
+        <div id="collapse_ip_list" class="pannel-collapse collapse">
+          <div class="panel-body">
+            {% for ip in node.ip_list %}
+            <a href="{% url 'infra:ip_details' ip.id %}">{{ ip }}</a><br>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
 {% else %}
 <p>Узел не найден.</p>
 {% endif%}

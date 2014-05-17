@@ -40,21 +40,21 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Главная</a></li>
+            <li><a href="/">Главная</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Разделы <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="{% url 'infra:retailer_list' %}">Поставщики</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
+                <li><a href="{% url 'infra:hardware_list' %}">Оборудование</a></li>
+                <li><a href="{% url 'infra:server_list' %}">Серверы</a></li>
+                <li><a href="{% url 'infra:build_list' %}">Сборки</a></li>
+                <li><a href="{% url 'infra:node_list' %}">Узлы</a></li>
+                <li><a href="{% url 'infra:subnet_list' %}">Подсети</a></li>
+                <li><a href="{% url 'infra:ip_list' %}">IP адреса</a></li>
               </ul>
             </li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="/admin/">Администрирование</a></li>
+            <li><a href="#about">О программе</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
