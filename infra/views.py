@@ -66,7 +66,7 @@ def retailer_list(request):
         form = RetailerSearchForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['name']:
-                query['name__iexact'] = form.cleaned_data['name']
+                query['name__icontains'] = form.cleaned_data['name']
             if form.cleaned_data['contract_id']:
                 query['contract_id__iexact'] = form.cleaned_data['contract_id']
     else:

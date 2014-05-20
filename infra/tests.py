@@ -32,6 +32,20 @@ class InfraTestCase(TestCase):
                              name="build",
                              version="201405",
                              revision="0")
+        Node.objects.create(hostname='test01',
+                            server=Server.objects.all()[0],
+                            build=Build.objects.all()[0],
+                            conf_type='shared')
+        Subnet.objects.create(net="192.168.0.0",
+                              mask=24,
+                              protocol='ipv4',
+                              mark='internal')
+        Ip_address.objects.create(ip='192.168.0.2',
+                                  subnet=Subnet.objects.all()[0],
+                                  node=Node.objects.all()[0])
+        Ip_address.objects.create(ip='192.168.0.3',
+                                  subnet=Subnet.objects.all()[0],
+                                  node=Node.objects.all()[0])
 
     def test_retailers(self):
         """Retailer display correct id string."""
@@ -53,3 +67,17 @@ class InfraTestCase(TestCase):
     def test_build(self):
         build = Build.objects.all()[0]
         self.assertEqual(unicode(build), u"aa_build/201405.0")
+
+    def test_node(self):
+        node = Node.objects.all()[0]
+        ip_list = node.ip_list()
+        self.assertEqual(len(ip_list), 2)
+        for ip in ip_list:
+            self.assertEqual(ip.subnet, Subnet.objects.all()[0])
+        self.assertEqual(node.server.mac, "00:00:00:00:00:aa")
+
+    def test_sunbet(self):
+        subnet = Subnet.objects.all()[0]
+        self.assertEqual(unicode(subnet), u"192.168.0.0/24")
+        self.assertEqual(subnet.total_count(), 2)
+
